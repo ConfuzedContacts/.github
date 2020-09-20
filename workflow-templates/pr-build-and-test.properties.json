@@ -1,7 +1,7 @@
 {
     "name": "PR Check Build for dotnet",
     "description": "Build and Test Workflow for Pull Requests on dotnet projects",
-    "iconName": "",
+    "iconName": "tick",
     "categories": [
         "C#"
     ],
