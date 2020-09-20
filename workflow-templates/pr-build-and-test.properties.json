@@ -3,9 +3,9 @@
     "description": "Build and Test Workflow for Pull Requests on dotnet projects",
     "iconName": "tick",
     "categories": [
-        "C#"
+        
     ],
     "filePatterns": [
-        "*.sln$"
+        
     ]
 }
