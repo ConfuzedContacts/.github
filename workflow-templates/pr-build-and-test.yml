@@ -1,0 +1,36 @@
+name: PR Build and Test
+
+on: pull_request
+
+env:
+  dotnet_version: "3.1.301"
+  buildconfiguration: Release
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: ${{ env.dotnet_version }}
+    - name: NuGet Cache
+      uses: actions/cache@v1
+      env:
+        NUGET_CACHE_KEY: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+      with:
+        path: ~/.nuget/packages
+        key: ${{ env.NUGET_CACHE_KEY }}
+        restore-keys: |
+          ${{ runner.os }}-nuget-
+    - name: Install dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --configuration ${{ env.buildconfiguration }} --no-restore
+    - name: Test
+      if: success()
+      run: dotnet test --configuration ${{ env.buildconfiguration }} --no-restore --no-build --verbosity normal -r test-results
